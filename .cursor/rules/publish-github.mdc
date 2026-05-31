@@ -1,0 +1,64 @@
+---
+description: Publicar pacote no GitHub privado quando o utilizador pedir "publique"
+alwaysApply: true
+---
+
+# Publicar `@genesis/domain-producao`
+
+Quando o utilizador pedir **publicar**, **publique**, **publish**, **deploy do pacote** ou equivalente, **executar o fluxo completo neste repo** — não pedir confirmação extra salvo bloqueio concreto.
+
+## Fluxo obrigatório (agente + script)
+
+| # | Passo | Quem |
+|---|--------|------|
+| 1 | `npm run build` | agente |
+| 2 | `npm test` | agente |
+| 3 | **Ajustes/correções** até testes passarem | agente (repetir 1–2 se necessário) |
+| 4 | `npm run build` | agente (confirmação final) |
+| 5 | `npm test` — **100% verde obrigatório** | agente |
+| 6 | `npm run publish:github -- "mensagem clara (porquê)"` | script: verificação dupla + commit + push |
+| 7 | Informar **commit SHA** e passos na Platform | agente |
+
+O script `publish:github` **re-executa** build + testes antes de commit/push.
+
+### Mensagem de commit
+
+- `npm run publish:github -- "fix: motivo da alteração"`
+- Alternativa: `PUBLISH_COMMIT_MSG="..." npm run publish:github`
+- Fallback: `chore: publish @genesis/domain-producao`
+
+## Padronização do pacote (obrigatório)
+
+- **Sem sufixo Git:** `github:doalti/genesis-domain-producao` — **proibido** `#main`, `#v1.0.0`, `#abc1234`.
+- **Sem bump de versão** no `package.json` para publicar — lockfile da Platform fixa o commit SHA.
+- **Sem `npm publish`** no npmjs.com — pacote **sempre privado** via GitHub.
+
+## Proibido
+
+- Commit/push com testes a falhar ou build quebrado.
+- Alterações em `genesis-platform` ou outros repositórios — só indicar passos ao utilizador.
+- Tags semver ou GitHub Release como requisito de publicação diária (opcionais para auditoria).
+
+## Consumo na Platform
+
+```json
+"@genesis/domain-producao": "github:doalti/genesis-domain-producao"
+```
+
+```bash
+npm update @genesis/domain-producao
+npm run sync:functions-vendors
+npm --prefix functions run build
+```
+
+Dev local:
+
+```json
+"@genesis/domain-producao": "file:../../genesis-domain-producao"
+```
+
+## Script
+
+```bash
+npm run publish:github -- "fix: motivo da alteração"
+```

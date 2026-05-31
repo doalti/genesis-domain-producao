@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Producao — Dev Playground</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="header">
+    <h1>Producao Dev Playground</h1>
+    <p class="subtitle">@genesis/domain-producao — LLM via <code>PLAYGROUND_GEMINI_API_KEY</code></p>
+    <div class="status" id="healthStatus">…</div>
+    <select id="sampleSelect"><option value="">Exemplo…</option></select>
+  </header>
+  <main class="layout">
+    <section class="panel">
+      <div id="chatLog" class="chat-log"></div>
+      <form id="chatForm" class="chat-form">
+        <textarea id="chatInput" rows="2" placeholder="Mensagem…"></textarea>
+        <button type="submit">Enviar</button>
+      </form>
+    </section>
+    <section class="panel"><pre id="rawOut"></pre></section>
+  </main>
+  <script src="/app.js" type="module"></script>
+</body>
+</html>

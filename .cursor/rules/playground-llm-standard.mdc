@@ -1,0 +1,38 @@
+---
+description: Padrão playground + LLM em todos os pacotes Genesis (exceto platform)
+alwaysApply: true
+---
+
+# Playground e LLM (padrão Genesis)
+
+## Obrigatório em cada repositório (exceto genesis-platform)
+
+1. **Paths GAS** — `contracts/`, `core/`, `adapters/`; capabilities também `runtime/` e `plugin/`.
+2. **LLM** — port em `contracts/llm-port.ts`; adapter Gemini em `adapters/gemini/gemini-llm-adapter.ts`.
+3. **Playground** — `dev/playground/` com `server.ts`, `chat-turn.ts`, `samples.ts`, `public/`.
+4. **Scripts** — `npm run dev:playground` e `dev:playground:build`.
+
+## Variáveis
+
+- `PLAYGROUND_GEMINI_API_KEY` ou `GOOGLE_API_KEY`
+- `PLAYGROUND_GEMINI_MODEL` (opcional)
+- `PLAYGROUND_PORT` (opcional, default por repo)
+
+## Imports
+
+- Código em `src/` usa sufixo `.js` (Node ESM).
+- Playground importa runtime compilado de `../../dist/...`.
+
+## Proibido
+
+- LLM acoplado à Platform — adapter no pacote (`adapters/gemini/`).
+- Playground sem port canónico em `contracts/`.
+- Paths legados paralelos (`src/knowledge/` fora de `core/`).
+
+## Scaffold
+
+```bash
+cd genesis-devkit
+npm run scaffold:gas
+npm run scaffold:playground
+```

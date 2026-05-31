@@ -1,0 +1,250 @@
+---
+description: Genesis Architecture Standard (GAS) — ownership, estrutura e dependências
+alwaysApply: true
+---
+
+# Genesis Architecture Standard (GAS)
+
+## Princípios Fundamentais
+
+### 1. Ownership Único
+
+Todo conceito possui um **único owner**.
+
+| Conceito | Owner |
+|----------|-------|
+| Customer | `genesis-domain-customer` |
+| QueryLifecycle | `capability-query-builder` |
+| CapabilityPlugin | kernel/platform |
+| FlowExecution | `capability-flow` |
+
+Se existir dúvida sobre o owner, a arquitetura está errada.
+
+### 2. Fonte Canônica
+
+Cada conceito possui apenas **uma implementação canônica**.
+
+**Permitido:**
+
+```typescript
+import { QueryLifecycle } from "@genesis/capability-query-builder/contracts";
+```
+
+**Proibido** — nomes distintos representando a mesma coisa:
+
+- `QueryLifecycle`
+- `QueryBuilderLifecycle`
+- `QueryLifecycleV2`
+
+### 3. Sem Espelhamento
+
+Nunca criar ficheiros com o mesmo conteúdo:
+
+- `customer-types.ts`
+- `customer-contracts.ts`
+- `customer-models.ts`
+
+O tipo deve existir **apenas uma vez**.
+
+### 4. Adapters Não Contêm Regra
+
+Adapters **apenas convertem**.
+
+**Permitido:**
+
+```
+ERPCustomer → Customer
+```
+
+**Proibido:**
+
+```
+ERPCustomer → Customer
++ validação
++ enrichment
++ business rules
+```
+
+## Estrutura Universal
+
+Todo pacote Genesis deve seguir:
+
+```
+src/
+├── contracts/
+├── core/
+├── runtime/
+├── adapters/
+└── index.ts
+```
+
+### `contracts/`
+
+API pública. Contém: types, interfaces, events, enums, schemas, ports.
+
+**Nunca contém:** implementação, queries, runtime.
+
+### `core/`
+
+Regra de negócio. Contém: entities, services, validators, orchestrators, engines.
+
+É o **coração** do pacote.
+
+### `runtime/`
+
+Execução. Contém: bootstrap, factories, dependency injection, registrations.
+
+**Nunca contém** regra de negócio.
+
+### `adapters/`
+
+Integração externa. Contém: ERP, Firestore, Gemini, OpenAI, REST, GraphQL.
+
+## Dependências Permitidas
+
+Fluxo único:
+
+```
+contracts
+    ↓
+core
+    ↓
+runtime
+    ↓
+adapters
+```
+
+**Nunca:**
+
+- `contracts → runtime`
+- `contracts → adapters`
+- `core → runtime`
+
+## Subpaths Públicos
+
+Somente:
+
+- `/contracts`
+- `/runtime`
+
+Opcional (quando necessário):
+
+- `/plugin`
+- `/platform`
+
+## Regras por Tipo de Pacote
+
+### `genesis-domain-*`
+
+```
+contracts/
+core/
+adapters/
+```
+
+- Não possuem plugin.
+- Não possuem runtime complexo.
+- Exemplos: `domain-customer`, `domain-financial`, `domain-fiscal`
+
+### `genesis-capability-*`
+
+```
+contracts/
+core/
+runtime/
+adapters/
+plugin/
+```
+
+- Exemplos: `capability-query-builder`, `capability-copilot`, `capability-flow`
+
+### `genesis-engine-*`
+
+```
+contracts/
+core/
+runtime/
+```
+
+- Sem plugins.
+- Sem domínio.
+
+### `genesis-platform`
+
+```
+contracts/
+kernel/
+registry/
+loader/
+runtime/
+adapters/
+```
+
+A Platform **nunca implementa** Query Builder, Copilot, CRM, Fiscal ou Financeiro — ela **apenas hospeda**.
+
+## Lifecycle
+
+Cada pacote pode possuir apenas **1 lifecycle canônico**.
+
+**Permitido:** `CustomerLifecycle`
+
+**Proibido** — representando a mesma coisa:
+
+- `CustomerLifecycle`
+- `CustomerLifecycleV2`
+- `CustomerUxPhase`
+- `CustomerState`
+
+Adapters podem traduzir. **Nunca duplicar.**
+
+## Ports
+
+Ports são **contratos**. Nunca implementações.
+
+**Permitido:** `CustomerRepositoryPort`, `LLMPort`, `QueryExecutionPort`
+
+**Proibido:** `FirestoreCustomerRepositoryPort`, `GeminiPort` — esses são **adapters**.
+
+## Barrels
+
+Barrels apenas agregam exports.
+
+**Permitido:**
+
+```typescript
+export * from "./customer.js";
+export * from "./events.js";
+```
+
+**Proibido:**
+
+```typescript
+const service = createService();
+export { service };
+```
+
+## Regra de Migração
+
+Quando mover um conceito:
+
+1. Criar nova fonte canônica
+2. Migrar consumidores
+3. Remover implementação antiga
+4. Proibir coexistência
+
+**Nunca manter** Platform Query Builder **+** Capability Query Builder ao mesmo tempo.
+
+## Checklist Obrigatório
+
+Antes de qualquer PR, verificar:
+
+- [ ] Existe owner definido?
+- [ ] Existe implementação igual em outro local?
+- [ ] Existe lifecycle duplicado?
+- [ ] Existe tipo espelhado?
+- [ ] Existe adapter contendo regra?
+- [ ] Existe port contendo implementação?
+- [ ] Existe barrel com lógica?
+- [ ] Existe subpath público novo?
+
+Se alguma resposta for **sim**, a alteração deve ser **revisada**.

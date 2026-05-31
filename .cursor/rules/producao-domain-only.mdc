@@ -1,0 +1,50 @@
+---
+description: Regra absoluta — este repositório contém exclusivamente o domínio producao
+alwaysApply: true
+---
+
+# APENAS DOMÍNIO PRODUCAO
+
+**Regra absoluta:** APENAS DOMÍNIO PRODUCAO PARA TUDO QUE FOR DESENVOLVIDO NESSE PROJETO.
+
+## Obrigatório
+
+- **Privacidade:** repositório GitHub e pacote **sempre privados**. Nunca publicar no npm público (npmjs.com). Distribuição via GitHub privado — `github:doalti/genesis-domain-producao` **sem** `#main`; lockfile no consumidor fixa o SHA.
+- **Publicar:** quando o utilizador pedir **publique**, seguir regra `publish-github.mdc` (build → testes → commit → push).
+- Todo código, conteúdo, testes e documentação neste repositório deve pertencer **exclusivamente** ao BusinessDomain **producao** (Produção, OP, apontamento, formação de carga, estoque, endereçamento, separação/picking, reabastecimento, inventário).
+- Manter escopo limitado a: `contracts/`, `core/knowledge`, `core/query-hints` e export do pacote `@genesis/domain-producao`.
+
+## Ownership — o que NÃO é producao (outro repositório)
+
+| Conceito | Owner |
+|----------|--------|
+| RH, Departamento Pessoal, folha, Pessoal+, eSocial | `genesis-domain-rh` |
+| Fiscal, ICMS, SPED, reforma tributária | `genesis-domain-fiscal` |
+| Financeiro, títulos, fluxo de caixa | `genesis-domain-finance` |
+
+**Nunca** incluir knowledge, query hints ou documentação de RH/DP neste pacote.
+
+## Proibido neste repositório
+
+- Código ou configuração de **outros domínios** (fiscal, finance, producao, accounting, production, platform, commercial, RH, etc.).
+- Conteúdo de **folha**, **eSocial**, **Pessoal+**, **INSS/FGTS/IRRF** de colaboradores — owner `genesis-domain-rh`.
+- **Capabilities** (query-builder, crud, report-builder, dashboard, java, copilot, ddl).
+- **Platform / runtime / orquestração**: bootstrap, registry, routing, validators SQL, tools, planner, builder, Firebase Functions, frontend.
+- Alterações em **outros repositórios** (`genesis-platform`, `genesis`, capabilities, etc.) — cada projeto trata a sua integração.
+- Dependências de runtime da Platform ou de pacotes `@genesis/copilot-*` (exceto tipos mínimos se estritamente necessários no futuro; preferir zero dependência).
+
+## Integração
+
+Consumidores (ex.: `genesis-platform`) instalam e registram este pacote **no projeto deles**. Não implementar integração aqui.
+
+## Nomenclatura de funções
+
+Todas as funções usam o prefixo do repositório (`genesis-domain-producao-` / `genesisDomainProducao…`). Ver regra `function-package-prefix.mdc`.
+
+## Antes de entregar qualquer change
+
+1. Confirmar que o diff toca **somente** conteúdo do domínio producao.
+2. Rejeitar escopo que misture repositórios ou domínios.
+3. Se a tarefa exigir Platform ou outro domínio, **parar** e indicar que deve ser feita no repositório correspondente.
+4. Funções novas ou alteradas respeitam o prefixo `genesisDomainProducao`.
+5. Pedido **publique** → seguir `.cursor/rules/publish-github.mdc` (build, testes, commit, push — sem bump semver, sem `#main`).

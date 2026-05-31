@@ -1,0 +1,43 @@
+---
+description: Prefixo obrigatório do pacote/repositório em todas as funções
+alwaysApply: true
+---
+
+# Prefixo do pacote em funções
+
+Todas as **funções** criadas ou alteradas neste repositório devem usar o prefixo do **nome do repositório** (slug em kebab-case).
+
+## Este repositório
+
+| Contexto | Prefixo | Exemplo |
+|----------|---------|---------|
+| Recursos (Cloud Functions, jobs, endpoints) | `genesis-domain-producao-` | `genesis-domain-producao-map-message-to-query-hints` |
+| TypeScript / JavaScript (identificadores) | `genesisDomainProducao` | `genesisDomainProducaoMapMessageToQueryHints` |
+
+Identificadores em código **não** usam hífen; converta o slug `genesis-domain-producao` para camelCase `genesisDomainProducao` e concatene o restante do nome em camelCase.
+
+## Outros repositórios (referência)
+
+| Repositório | Prefixo kebab | Prefixo camelCase (TS/JS) |
+|-------------|---------------|---------------------------|
+| `genesis-platform` | `genesis-platform-` | `genesisPlatform` |
+| `genesis-domain-fiscal` | `genesis-domain-fiscal-` | `genesisDomainFiscal` |
+| `genesis-domain-finance` | `genesis-domain-finance-` | `genesisDomainFinance` |
+| `genesis-domain-rh` | `genesis-domain-rh-` | `genesisDomainRh` |
+| `genesis-domain-producao` | `genesis-domain-producao-` | `genesisDomainProducao` |
+| `genesis-domain-commercial` | `genesis-domain-commercial-` | `genesisDomainCommercial` |
+
+## Obrigatório
+
+- Funções **exportadas** e **internas** (helpers, handlers, callbacks) seguem o prefixo.
+- Ao renomear, atualizar exports, testes, `queryHints` e documentação em `docs/`.
+
+## Exceções
+
+- Métodos de bibliotecas de terceiros e callbacks impostos por APIs externas (assinatura fixa).
+- Construtores de classes de framework, quando o nome é imposto pelo runtime.
+
+## Antes de entregar
+
+1. Confirmar que toda função nova ou renomeada começa com `genesisDomainProducao` (código) ou `genesis-domain-producao-` (recursos).
+2. Não usar prefixos de outro repositório (ex.: `genesis-platform-`, `genesisDomainFiscal`).
