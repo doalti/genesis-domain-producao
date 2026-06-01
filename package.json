@@ -2,7 +2,7 @@
   "name": "@genesis/domain-producao",
   "version": "1.0.0",
   "private": true,
-  "description": "BusinessDomain producao \u2014 knowledge e query hints (OP, apontamento, PCP, manufatura) [pacote privado]",
+  "description": "BusinessDomain producao — knowledge e query hints (OP, apontamento, PCP, manufatura) [pacote privado]",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -14,6 +14,10 @@
     "./contracts": {
       "types": "./dist/contracts/index.d.ts",
       "import": "./dist/contracts/index.js"
+    },
+    "./plugin": {
+      "types": "./dist/plugin.d.ts",
+      "import": "./dist/plugin.js"
     }
   },
   "files": [
@@ -38,6 +42,7 @@
     "typescript": "^5.8.3",
     "vitest": "^3.2.4",
     "tsx": "^4.22.3",
-    "@types/node": "^22.15.21"
+    "@types/node": "^22.15.21",
+    "@genesis/plugin-contracts": "file:../genesis-platform/packages/plugin-contracts"
   }
 }
