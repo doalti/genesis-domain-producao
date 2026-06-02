@@ -39,10 +39,11 @@
     "dev:playground:build": "npm run build && tsx dev/playground/server.ts"
   },
   "devDependencies": {
-    "typescript": "^5.8.3",
-    "vitest": "^3.2.4",
-    "tsx": "^4.22.3",
+    "@genesis/contracts": "github:doalti/genesis-contracts",
+    "@genesis/plugin-contracts": "file:../genesis-platform/packages/plugin-contracts",
     "@types/node": "^22.15.21",
-    "@genesis/plugin-contracts": "file:../genesis-platform/packages/plugin-contracts"
+    "tsx": "^4.22.3",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
   }
 }

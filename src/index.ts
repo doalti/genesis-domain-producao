@@ -8,9 +8,12 @@ export {
   genesisDomainProducaoMapMessageToQueryHints,
   knowledge,
   queryHints,
+  mapProducaoMessageToBusinessSpecification,
 } from "./core/index.js";
 
 import { knowledge, queryHints } from "./core/index.js";
+
+import { mapProducaoMessageToBusinessSpecification } from "./core/business-specification.js";
 
 const ProducaoDomain = {
   id: "producao",
@@ -18,6 +21,7 @@ const ProducaoDomain = {
   version: "1.0.0",
   knowledge,
   queryHints,
+  businessSpecification: [mapProducaoMessageToBusinessSpecification] as const,
 };
 
 export default ProducaoDomain;

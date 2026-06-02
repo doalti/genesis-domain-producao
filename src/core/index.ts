@@ -12,3 +12,5 @@ export {
 } from "./query-hints/index.js";
 
 export { genesisDomainProducaoAnalyzeMessageWithLlm } from "./llm/analyze-message-with-llm.js";
+
+export { mapProducaoMessageToBusinessSpecification } from "./business-specification.js";

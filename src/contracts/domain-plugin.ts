@@ -8,4 +8,6 @@ export interface DomainPlugin {
 
   knowledge?: unknown[];
   queryHints?: unknown[];
+  /** `[mapMessageToBusinessSpecificationFn]` — saída canônica de negócio. */
+  businessSpecification?: unknown[];
 }
